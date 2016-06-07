@@ -51,19 +51,21 @@ pm2Bridge.onMessage(function(data) {
 ```
 
 ## Options
-`pm2Bridge.onMessage(function cb(data) {console.log(data);})`
-    - `data`:
-        - `from`: the name of the pm2 process that sent the message
-        - `data`: the data that the sender sent along
+`pm2Bridge.onMessage(function cb(data) {console.log(data);})`:
+
+- `data`:
+    - `from`: the name of the pm2 process that sent the message
+    - `data`: the data that the sender sent along
+
 The `cb` callback is bound to a `reply` method that can be called to return the data to the sender
 
 `pm2Bridge.send(message).then(response => {console.log(response}`:
-    - `message`:
-        - `data`: the content of the message to be passed
-        - `to`: the pm2 name of the process to which the message is destined to
-        - `timeout`: response timeout in ms. If after that the receiver has not responded `send` will be rejected
+- `message`:
+    - `data`: the content of the message to be passed
+    - `to`: the pm2 name of the process to which the message is destined to
+    - `timeout`: response timeout in ms. If after that the receiver has not responded `send` will be rejected
 `pm2Bridge.send` returns a promise that resolves with the receiver's response.
 `pm2Bridge.send` returns a promise that rejects when one of the following happens:
-    - `pm2Bridge.send` where given invalid arguments
-    - No receiver with the specified pm2 name could be found
-    - Timeout exceeded
+- `pm2Bridge.send` where given invalid arguments
+- No receiver with the specified pm2 name could be found
+- Timeout exceeded
