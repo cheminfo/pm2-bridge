@@ -57,6 +57,9 @@ module.exports = {
             if(!message.to) {
                 return reject(new Error('to is mandatory'));
             }
+            if(!message.data) {
+                return reject(new Error('data is mandatory'));
+            }
             pendingReply.set(id, {resolve, reject});
             var toSend = {
                 type: 'pm2-bridge',

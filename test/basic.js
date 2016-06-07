@@ -61,5 +61,29 @@ describe('basic', function () {
                 }
             ]
         })
-    })
+    });
+
+    it('no to', function () {
+        return helper.test({
+            expect: ['to is mandatory'],
+            scripts: [
+                {
+                    name: 'sender',
+                    script: 'test/scripts/basic/senderNoTo.js'
+                }
+            ]
+        })
+    });
+
+    it('no data', function () {
+        return helper.test({
+            expect: ['data is mandatory'],
+            scripts: [
+                {
+                    name: 'sender',
+                    script: 'test/scripts/basic/senderNoData.js'
+                }
+            ]
+        })
+    });
 });
