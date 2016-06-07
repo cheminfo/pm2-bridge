@@ -37,7 +37,7 @@ describe('basic', function () {
     
     it('times out', function () {
         return helper.test({
-            expect: ['No response after timeout', 'receiver received'],
+            expect: ['timeout exceeded', 'receiver received'],
             scripts: [
                 {
                     name: 'receiver',

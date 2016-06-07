@@ -68,7 +68,7 @@ module.exports = {
             process.send(toSend);
 
             setTimeout(function () {
-                reject(new Error('No response after timeout'));
+                reject(new Error('timeout exceeded'));
                 pendingReply.delete(id);
             }, message.timeout);
         });
