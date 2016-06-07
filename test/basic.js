@@ -3,7 +3,7 @@
 const helper = require('./helper');
 
 describe('basic', function () {
-    it('simple send and reply with no data', function () {
+    it.only('simple send and reply with no data', function () {
         return helper.test({
             expect: ['receiver received', 'sender received reply'],
             scripts: [

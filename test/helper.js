@@ -5,6 +5,7 @@ var messages = [];
 var onNewMessage;
 var _resolveBridge;
 const init = connect().then(launchBus);
+const processes = new Set();
 
 function connect() {
     return new Promise(function(resolve, reject) {
@@ -42,6 +43,7 @@ function startPm2Bridge() {
             if(err) {
                 return reject(err);
             }
+            processes.add('pm2-bridge');
         });
     });
 }
@@ -59,9 +61,7 @@ module.exports = {
             .catch(close);
 
         function launchScripts() {
-            return pm2Start(config.scripts).then(function(processes) {
-                config.processes = processes;
-            });
+            return pm2Start(config.scripts);
         }
 
         function listenEvents() {
@@ -95,16 +95,16 @@ module.exports = {
 };
 
 function pm2DeleteAll(options) {
-    return pm2Delete('all', options);
+    return pm2Delete(processes, options);
 }
 
 
 function pm2Delete(processes, options) {
     options = options || {};
-    if(processes instanceof Array) {
+    if(processes instanceof Set) {
         var prom = [];
-        for(var i=0; i<processes.length; i++) {
-            prom.push(pm2Delete(processes[i]));
+        for(let processName of processes) {
+            prom.push(pm2Delete(processName));
         }
         return Promise.all(prom);
     } else {
@@ -117,19 +117,19 @@ function pm2Delete(processes, options) {
     }
 }
 
-function pm2Start(processes) {
-    if(processes instanceof Array) {
+function pm2Start(proc) {
+    if(proc instanceof Array) {
         var prom = [];
-        for(let i=0; i<processes.length; i++) {
-            prom.push(pm2Start(processes[i]));
+        for(let i=0; i<proc.length; i++) {
+            prom.push(pm2Start(proc[i]).then(processName => processes.add(processName)));
         }
         return Promise.all(prom);
     } else {
         return new Promise(function(resolve, reject) {
-            pm2.start(processes, function(err) {
+            pm2.start(proc, function(err) {
                 if(err) return reject(err);
-                return resolve(processes.name);
+                return resolve(proc.name);
             });
-        })
+        });
     }
 }
