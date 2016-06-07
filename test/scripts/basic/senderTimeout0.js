@@ -2,10 +2,9 @@
 const pm2Bridge = require('../../..');
 
 pm2Bridge.send({
-    to: 'receiver',
-    data: {test: 1}
-}, {
-    timeout: 0
+    data: {test: 1},
+    timeout: 0,
+    to: 'receiver'
 }).then(function(data) {
     process.send({
         type: 'pm2-bridge:test',

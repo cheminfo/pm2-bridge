@@ -36,7 +36,7 @@ function resolveBridge() {
 function startPm2Bridge() {
     return new Promise(function(resolve, reject) {
         _resolveBridge = resolve;
-        pm2.start('bin/pm2-bridge.js', {
+        pm2.start('bin/start.js', {
             name: 'pm2-bridge'
         }, function(err, proc) {
             if(err) {

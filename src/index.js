@@ -24,16 +24,17 @@ function getThisCb(packet) {
 }
 
 process.on('message', function (packet) {
+    console.log('on message', packet);
     var pending = pendingReply.get(packet.messageId);
     if (pending) {
         if(packet.error) {
             pending.reject(new Error(packet.error));
         } else {
-            pending.resolve(packet.data);
+            pending.resolve(packet.data.data);
         }
     } else {
             for (let i = 0; i < callbacks.length; i++) {
-                callbacks[i].call(getThisCb(packet), packet);
+                callbacks[i].call(getThisCb(packet), packet.data);
             }
     }
 });
@@ -43,15 +44,19 @@ module.exports = {
         callbacks.push(cb);
     },
 
-    send(data, options) {
-        options = Object.assign({}, defaultOptions, options);
-        var message = {
-            to: data.to,
-            data: data.data
-        };
+    send(message) {
+        message = Object.assign({}, defaultOptions, message);
+
         var id = pid + '_' + count++;
         message.messageId = id;
+        console.log(message);
         return new Promise(function (resolve, reject) {
+            if(!process.send) {
+                return reject(new Error('No process.send, make sure to start this script with pm2'));
+            }
+            if(!message.to) {
+                return reject(new Error('to is mandatory'));
+            }
             pendingReply.set(id, {resolve, reject});
             var toSend = {
                 type: 'pm2-bridge',
@@ -62,7 +67,7 @@ module.exports = {
             setTimeout(function () {
                 reject(new Error('No response after timeout'));
                 pendingReply.delete(id);
-            }, options.timeout);
+            }, message.timeout);
         });
 
     }

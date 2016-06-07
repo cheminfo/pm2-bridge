@@ -19,6 +19,7 @@ pm2.connect(function () {
     pm2.launchBus(function (err, bus) {
         bus.on('pm2-bridge', function (packet) {
 
+            console.log('received', packet.data);
             var data = packet.data;
 
             if(from[data.messageId]) {
@@ -46,7 +47,10 @@ pm2.connect(function () {
                 }
                 for(let i=0; i < receivers.length; i++) {
                     pm2.sendDataToProcessId(receivers[i].pm2_env.pm_id, {
-                        data: data.data,
+                        data: {
+                            data: data.data,
+                            from: packet.process.name
+                        },
                         topic: 'none',
                         messageId: data.messageId
                     }, function(err, res) {
