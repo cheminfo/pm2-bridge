@@ -1,6 +1,6 @@
 {
   "name": "pm2-bridge",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Interprocess communication with pm2",
   "main": "src/index.js",
   "scripts": {
