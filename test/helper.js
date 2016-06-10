@@ -3,9 +3,12 @@
 const pm2 = require('pm2');
 var messages = [];
 var onNewMessage;
-var _resolveBridge;
 const init = connect().then(launchBus);
 const processes = new Set();
+
+function noop() {
+
+}
 
 function connect() {
     return new Promise(function(resolve, reject) {
@@ -24,40 +27,21 @@ function launchBus() {
                 messages.push(packet);
                 onNewMessage(messages);
             });
-            bus.on('pm2-bridge:ready', resolveBridge);
             resolve();
         });
     });
 }
 
-function resolveBridge() {
-    _resolveBridge();
-}
-
-function startPm2Bridge() {
-    return new Promise(function(resolve, reject) {
-        _resolveBridge = resolve;
-        pm2.start('bin/start.js', {
-            name: 'pm2-bridge'
-        }, function(err, proc) {
-            if(err) {
-                return reject(err);
-            }
-            processes.add('pm2-bridge');
-        });
-    });
-}
 
 module.exports = {
 
     test(config) {
         config = Object.assign({}, config);
         return init
-            .then(startPm2Bridge)
             .then(launchScripts)
             .then(listenEvents)
             .then(checkResults)
-            .then(pm2DeleteAll)
+            .then(() => pm2DeleteAll({ingoreError: true}))
             .catch(close);
 
         function launchScripts() {
@@ -99,19 +83,22 @@ function pm2DeleteAll(options) {
 }
 
 
-function pm2Delete(processes, options) {
+function pm2Delete(proc, options) {
     options = options || {};
-    if(processes instanceof Set) {
+    if(proc instanceof Set) {
         var prom = [];
-        for(let processName of processes) {
+        for(let processName of proc) {
             prom.push(pm2Delete(processName));
         }
         return Promise.all(prom);
     } else {
         return new Promise(function(resolve, reject) {
-            pm2.delete(processes, function(err) {
+            pm2.delete(proc, function(err) {
+                processes.delete(proc);
                 if(!options.ignoreError && err) return reject(err);
-                return resolve();
+                // It seems that pm2 process is not always actually off
+                // when this callback is called
+                setTimeout(resolve, 100);
             })
         });
     }
@@ -127,7 +114,9 @@ function pm2Start(proc) {
     } else {
         return new Promise(function(resolve, reject) {
             pm2.start(proc, function(err) {
-                if(err) return reject(err);
+                if(err) {
+                    return reject(err);
+                }
                 return resolve(proc.name);
             });
         });

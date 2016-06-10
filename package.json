@@ -4,8 +4,9 @@
   "description": "Interprocess communication with pm2",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --timeout 5000 --require should",
-    "start": "pm2 startOrReload ./bin/start.js --name=pm2-bridge || echo 'please install pm2: npm i -g pm2'"
+    "test": "npm run start && mocha --timeout 5000 --require should; npm run delete",
+    "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
+    "delete": "pm2 delete ./start.json"
   },
   "bin": {
     "start": "bin/pm2-bridge"
