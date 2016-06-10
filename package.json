@@ -8,9 +8,6 @@
     "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
     "delete": "pm2 delete ./start.json"
   },
-  "bin": {
-    "start": "bin/pm2-bridge"
-  },
   "keywords": [
     "pm2",
     "process"
