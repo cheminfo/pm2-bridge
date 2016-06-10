@@ -5,7 +5,7 @@ const helper = require('./helper');
 describe('basic', function () {
     it('simple send and reply with no data', function () {
         return helper.test({
-            expect: ['receiver received', 'sender received reply'],
+            expect: ['success: receiver received', 'success: sender received reply'],
             scripts: [
                 {
                     name: 'receiver',
@@ -37,7 +37,7 @@ describe('basic', function () {
     
     it('times out', function () {
         return helper.test({
-            expect: ['timeout exceeded', 'receiver received'],
+            expect: ['error: timeout exceeded', 'success: receiver received'],
             scripts: [
                 {
                     name: 'receiver',
@@ -53,7 +53,7 @@ describe('basic', function () {
 
     it('no receiver', function () {
         return helper.test({
-            expect: ['Receiver process not found'],
+            expect: ['error: Receiver process not found'],
             scripts: [
                 {
                     name: 'sender',
@@ -65,7 +65,7 @@ describe('basic', function () {
 
     it('no to', function () {
         return helper.test({
-            expect: ['to is mandatory'],
+            expect: ['error: to is mandatory'],
             scripts: [
                 {
                     name: 'sender',
@@ -77,13 +77,29 @@ describe('basic', function () {
 
     it('no data', function () {
         return helper.test({
-            expect: ['data is mandatory'],
+            expect: ['error: data is mandatory'],
             scripts: [
                 {
                     name: 'sender',
                     script: 'test/scripts/basic/senderNoData.js'
                 }
             ]
-        })
+        });
     });
+
+    it.only('reply error', function () {
+        return helper.test({
+            expect: [{from: 'sender', data: {test: 1}}, 'error: receiver replied with error'],
+            scripts: [
+                {
+                    name: 'receiver',
+                    script: 'test/scripts/basic/replyError.js'
+                },
+                {
+                    name: 'sender',
+                    script: 'test/scripts/basic/senderWithData.js'
+                }
+            ]
+        });
+    })
 });

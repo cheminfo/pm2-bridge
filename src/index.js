@@ -27,8 +27,8 @@ process.on('message', function (packet) {
     console.log('on message', packet);
     var pending = pendingReply.get(packet.messageId);
     if (pending) {
-        if(packet.error) {
-            pending.reject(new Error(packet.error));
+        if(packet.data.data.error) {
+            pending.reject(new Error(packet.data.data.error));
         } else {
             pending.resolve(packet.data.data);
         }

@@ -13,7 +13,7 @@ pm2Bridge.send({
 }, function(err) {
     process.send({
         type: 'pm2-bridge:test',
-        data: err.message
+        data: `error: ${err.message}`
     });
 });
 

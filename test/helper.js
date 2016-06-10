@@ -6,16 +6,13 @@ var onNewMessage;
 const init = connect().then(launchBus);
 const processes = new Set();
 
-function noop() {
-
-}
-
 function connect() {
     return new Promise(function(resolve, reject) {
         pm2.connect(function(err) {
             if(err) return reject(err);
             resolve();
         });
+
     });
 }
 
@@ -28,6 +25,15 @@ function launchBus() {
                 onNewMessage(messages);
             });
             resolve();
+        });
+    });
+}
+
+function pm2List() {
+    return new Promise(function(resolve, reject) {
+        pm2.list(function(err, res) {
+            if(err) return reject(err);
+             return resolve(res);
         });
     });
 }

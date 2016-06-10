@@ -7,12 +7,12 @@ pm2Bridge.send({
 }).then(function(data) {
     process.send({
         type: 'pm2-bridge:test',
-        data: 'sender received reply'
+        data: 'success: sender received reply'
     });
 }, function(err) {
     process.send({
         type: 'pm2-bridge:test',
-        data: err.message
+        data: `error: ${err.message}`
     });
 });
 
