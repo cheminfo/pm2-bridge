@@ -4,7 +4,7 @@
   "description": "Interprocess communication with pm2",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm run start && mocha --timeout 5000 --require should; npm run delete",
+    "test": "npm run start && mocha --timeout 3000 --require should; npm run delete",
     "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
     "delete": "pm2 delete ./start.json"
   },

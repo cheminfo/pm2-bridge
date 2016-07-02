@@ -19,7 +19,6 @@ pm2.connect(function () {
     pm2.launchBus(function (err, bus) {
         bus.on('pm2-bridge', function (packet) {
 
-            console.log('received', packet.data);
             var data = packet.data;
 
             if(from[data.messageId]) {
@@ -56,7 +55,6 @@ pm2.connect(function () {
                     }, function(err, res) {
                         // Not adding this callback makes this script exit...
                         // Send error message to sender
-                        console.log(err, res)
                     });
                 }
             }).catch(e => {
@@ -75,7 +73,9 @@ function sendError(data, message) {
     var to = from[data.messageId];
     delete from[data.messageId];
     var receiver = processList.find(p => to === p.name);
-    if(!receiver) return;
+    if(!receiver) {
+        return;
+    }
     pm2.sendDataToProcessId(receiver.pm2_env.pm_id, {
         error: message,
         data: {},

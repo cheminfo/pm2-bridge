@@ -24,12 +24,13 @@ function getThisCb(packet) {
 }
 
 process.on('message', function (packet) {
-    console.log('on message', packet);
     var pending = pendingReply.get(packet.messageId);
     if (pending) {
-        if(packet.data.data.error) {
+        if(packet.error) { // pm2-bridge error
+            pending.reject(new Error(packet.error));
+        } else if(packet.data.data.error) { // user error
             pending.reject(new Error(packet.data.data.error));
-        } else {
+        } else { // success
             pending.resolve(packet.data.data);
         }
     } else {
@@ -49,7 +50,6 @@ module.exports = {
 
         var id = pid + '_' + count++;
         message.messageId = id;
-        console.log(message);
         return new Promise(function (resolve, reject) {
             if(!process.send) {
                 return reject(new Error('No process.send, make sure to start this script with pm2'));

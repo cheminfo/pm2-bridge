@@ -87,7 +87,7 @@ describe('basic', function () {
         });
     });
 
-    it.only('reply error', function () {
+    it('reply error', function () {
         return helper.test({
             expect: [{from: 'sender', data: {test: 1}}, 'error: receiver replied with error'],
             scripts: [
