@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "npm run start && mocha --timeout 3000 --require should;",
-    "travis-test": "npm run test; pm2 kill;",
+    "travis-test": "npm run test; es=$?; pm2 kill; exit $es",
     "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
     "delete": "pm2 delete ./start.json"
   },
