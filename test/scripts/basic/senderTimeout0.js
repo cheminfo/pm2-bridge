@@ -5,12 +5,12 @@ pm2Bridge.send({
     data: {test: 1},
     timeout: 0,
     to: 'receiver'
-}).then(function(data) {
+}).then(function (data) {
     process.send({
         type: 'pm2-bridge:test',
         data: data
     });
-}, function(err) {
+}, function (err) {
     process.send({
         type: 'pm2-bridge:test',
         data: `error: ${err.message}`
@@ -18,6 +18,6 @@ pm2Bridge.send({
 });
 
 
-setTimeout(function() {
+setTimeout(function () {
 
 }, 5000);

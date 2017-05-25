@@ -2,8 +2,7 @@
 
 const pm2Bridge = require('../../..');
 
-pm2Bridge.onMessage(function(data) {
-    console.log('received', data);
+pm2Bridge.onMessage(function (data) {
     process.send({
         type: 'pm2-bridge:test',
         data: data
@@ -11,6 +10,6 @@ pm2Bridge.onMessage(function(data) {
     this.reply(data.data);
 });
 
-setTimeout(function() {
+setTimeout(function () {
 
 }, 5000);

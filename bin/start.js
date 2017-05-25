@@ -8,7 +8,7 @@ var from = {};
 function updateProcessList() {
     return new Promise(function (resolve, reject) {
         pm2.list(function (err, list) {
-            if(err) return reject();
+            if (err) return reject();
             processList = list;
             return resolve(processList);
         });
@@ -21,11 +21,11 @@ pm2.connect(function () {
 
             var data = packet.data;
 
-            if(from[data.messageId]) {
+            if (from[data.messageId]) {
                 data.to = from[data.messageId];
                 delete from[data.messageId];
-            } else if(data.to) {
-                from[data.messageId] = packet.process.name
+            } else if (data.to) {
+                from[data.messageId] = packet.process.name;
             } else {
                 return;
             }
@@ -33,18 +33,18 @@ pm2.connect(function () {
             var to = data.to;
             var receivers = processList.filter(p => to === p.name);
             var prom = Promise.resolve();
-            if(receivers.length !== to.length) {
+            if (receivers.length !== to.length) {
                 prom = prom.then(updateProcessList);
             }
 
             prom.then(() => {
                 var receivers = processList.filter(p => to === p.name);
-                if(receivers.length === 0) {
-                    if(from[data.messageId]) {
+                if (receivers.length === 0) {
+                    if (from[data.messageId]) {
                         sendError(data, 'Receiver process not found');
                     }
                 }
-                for(let i=0; i < receivers.length; i++) {
+                for (let i = 0; i < receivers.length; i++) {
                     pm2.sendDataToProcessId(receivers[i].pm2_env.pm_id, {
                         data: {
                             data: data.data,
@@ -52,12 +52,12 @@ pm2.connect(function () {
                         },
                         topic: 'none',
                         messageId: data.messageId
-                    }, function(err, res) {
+                    }, function () {
                         // Not adding this callback makes this script exit...
                         // Send error message to sender
                     });
                 }
-            }).catch(e => {
+            }).catch(() => {
                 // if error send message to sender
             });
         });
@@ -73,7 +73,7 @@ function sendError(data, message) {
     var to = from[data.messageId];
     delete from[data.messageId];
     var receiver = processList.find(p => to === p.name);
-    if(!receiver) {
+    if (!receiver) {
         return;
     }
     pm2.sendDataToProcessId(receiver.pm2_env.pm_id, {

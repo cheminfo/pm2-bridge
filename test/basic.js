@@ -34,7 +34,7 @@ describe('basic', function () {
             ]
         });
     });
-    
+
     it('times out', function () {
         return helper.test({
             expect: ['error: timeout exceeded', 'success: receiver received'],
@@ -60,7 +60,7 @@ describe('basic', function () {
                     script: 'test/scripts/basic/sender.js'
                 }
             ]
-        })
+        });
     });
 
     it('no to', function () {
@@ -72,7 +72,7 @@ describe('basic', function () {
                     script: 'test/scripts/basic/senderNoTo.js'
                 }
             ]
-        })
+        });
     });
 
     it('no data', function () {
@@ -101,5 +101,5 @@ describe('basic', function () {
                 }
             ]
         });
-    })
+    });
 });

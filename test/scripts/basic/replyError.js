@@ -2,16 +2,16 @@
 
 const pm2Bridge = require('../../..');
 
-pm2Bridge.onMessage(function(data) {
+pm2Bridge.onMessage(function (data) {
     process.send({
         type: 'pm2-bridge:test',
         data: data
     });
     this.reply({
-        error:  'receiver replied with error'
+        error: 'receiver replied with error'
     });
 });
 
-setTimeout(function() {
+setTimeout(function () {
 
 }, 5000);

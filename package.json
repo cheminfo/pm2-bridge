@@ -4,10 +4,12 @@
   "description": "Interprocess communication with pm2",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm run start && mocha --timeout 3000 --require should;",
-    "travis-test": "npm run test; es=$?; pm2 kill; exit $es",
+    "delete": "pm2 delete ./start.json",
+    "eslint": "eslint src bin",
+    "eslint-fix": "eslint src bin --fix",
     "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
-    "delete": "pm2 delete ./start.json"
+    "test": "npm run start && mocha --timeout 3000 --require should;",
+    "travis-test": "npm run test; es=$?; pm2 kill; exit $es"
   },
   "keywords": [
     "pm2",
@@ -16,6 +18,9 @@
   "author": "Daniel Kostro <kostro.d@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-cheminfo": "^1.8.0",
+    "eslint-plugin-no-only-tests": "^1.1.0",
     "mocha": "^3.4.2",
     "pm2": "^2.4.6",
     "should": "^11.2.1"

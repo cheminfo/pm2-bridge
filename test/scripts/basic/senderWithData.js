@@ -4,12 +4,12 @@ const pm2Bridge = require('../../..');
 pm2Bridge.send({
     data: {test: 1},
     to: 'receiver'
-}).then(function(data) {
+}).then(function (data) {
     process.send({
         type: 'pm2-bridge:test',
         data
     });
-}, function(err) {
+}, function (err) {
     process.send({
         type: 'pm2-bridge:test',
         data: `error: ${err.message}`
@@ -17,6 +17,6 @@ pm2Bridge.send({
 });
 
 
-setTimeout(function() {
-
+setTimeout(function () {
+    // noop
 }, 5000);

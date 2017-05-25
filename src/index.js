@@ -20,23 +20,23 @@ function getThisCb(packet) {
             };
             process.send(toReply);
         }
-    }
+    };
 }
 
 process.on('message', function (packet) {
     var pending = pendingReply.get(packet.messageId);
     if (pending) {
-        if(packet.error) { // pm2-bridge error
+        if (packet.error) { // pm2-bridge error
             pending.reject(new Error(packet.error));
-        } else if(packet.data.data.error) { // user error
+        } else if (packet.data.data.error) { // user error
             pending.reject(new Error(packet.data.data.error));
         } else { // success
             pending.resolve(packet.data.data);
         }
     } else {
-            for (let i = 0; i < callbacks.length; i++) {
-                callbacks[i].call(getThisCb(packet), packet.data);
-            }
+        for (let i = 0; i < callbacks.length; i++) {
+            callbacks[i].call(getThisCb(packet), packet.data);
+        }
     }
 });
 
@@ -51,14 +51,17 @@ module.exports = {
         var id = pid + '_' + count++;
         message.messageId = id;
         return new Promise(function (resolve, reject) {
-            if(!process.send) {
-                return reject(new Error('No process.send, make sure to start this script with pm2'));
+            if (!process.send) {
+                reject(new Error('No process.send, make sure to start this script with pm2'));
+                return;
             }
-            if(!message.to) {
-                return reject(new Error('to is mandatory'));
+            if (!message.to) {
+                reject(new Error('to is mandatory'));
+                return;
             }
-            if(!message.data) {
-                return reject(new Error('data is mandatory'));
+            if (!message.data) {
+                reject(new Error('data is mandatory'));
+                return;
             }
             pendingReply.set(id, {resolve, reject});
             var toSend = {
