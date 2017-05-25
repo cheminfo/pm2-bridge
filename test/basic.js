@@ -3,6 +3,9 @@
 const helper = require('./helper');
 
 describe('basic', function () {
+    it('tests fail on travis', function () {
+        throw new Error('travis test error');
+    });
     it('simple send and reply with no data', function () {
         return helper.test({
             expect: ['success: receiver received', 'success: sender received reply'],
