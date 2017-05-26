@@ -1,53 +1,63 @@
 # pm2-bridge
-pm2-bridge is tiny library that enable you to easily send messages/commands and receive a reply between two pm2 processes
-## Prerequisites
-You will need to have pm2 installed globally
-```bash
-npm i -g pm2
-```
+pm2-bridge is tiny library that enable you to easily send messages/commands and receive a reply between two pm2 processes.
 
 ## Usage
 
-### Start the pm2-bridge process
-This starts the pm2-bridge manager
+### Install pm2 and pm2-bridge module
 ```bash
-npm i
-npm run start
+npm i -g pm2
+pm2 install pm2-bridge 
 ```
 
-### Communicate
-Start two other scripts with pm2 and let them communicate together
+### Install the pm2-bridge module
+```bash
+# Install the module
+pm2 install pm2-bridge
+# check that the module was installed
+pm2 status
+```
 
-Sender pm2 script
+### Install pm2-bridge client
+```bash
+npm install pm2-bridge
+```
+
+### Sender script
+
 ```js
+// sender.js
 const pm2Bridge = require('pm2-bridge');
 
-pm2Bridge.send({
-    to: 'receiver', // send something to the process with the pm2 name 'receiver'
-    data: {message: 'ping'} // Send some data along
-}).then(function(data) {
-    // Do something with the response
-    console.log(data.message); // pong
-}, function(err) {
-    // Something went wrong :(
-    console.error(err)
+setInterval(() => {
+    pm2Bridge.send({
+        to: 'receiver', // send something to the process with the pm2 name 'receiver'
+        data: 'ping' // Send some data along
+    }).then(function(message) {
+        // Receive the receiver's reply
+        console.log(message.data); // pong
+    }, function(err) {
+        // Something went wrong :(
+        // for example the receiver was not found
+        console.error(err)
+    });
+}, 2000);
+```
+
+### Receiver script
+```js
+// receiver.js
+const pm2Bridge = require('pm2-bridge');
+
+pm2Bridge.onMessage(function(message, context) {
+    console.log(message); // {from: 'sender', data: 'ping'}
+    context.reply('pong'); // Reply to the sender
 });
 
 ```
-
-Receiver pm2 script
-```js
-const pm2Bridge = require('pm2-bridge');
-
-pm2Bridge.onMessage((data, context) => {
-    // Do something with the data
-    // ...
-
-    console.log(data.from); // logs sender's pm2 name
-    console.log(data.data.message); // ping
-    // Reply using the provided context
-    context.reply({message: 'pong'});
-});
+### Start the scripts and watch them communicate
+```bash
+pm2 start receiver.js sender.js
+pm2 logs
 ```
 
 ## Options
