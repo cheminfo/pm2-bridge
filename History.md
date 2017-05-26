@@ -1,3 +1,17 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/cheminfo/pm2-bridge/compare/v1.0.0...v2.0.0) (2017-05-26)
+
+
+* Transform into pm2 module ([ca88d65](https://github.com/cheminfo/pm2-bridge/commit/ca88d65))
+
+
+### BREAKING CHANGES
+
+* The reply is now received on the data property to allow metadata to be
+added later
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/cheminfo/pm2-bridge/compare/v0.0.4...v1.0.0) (2017-05-25)
 
