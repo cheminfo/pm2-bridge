@@ -21,7 +21,7 @@ describe('basic', function () {
 
     it('simple send and reply with data', function () {
         return helper.test({
-            expect: [{from: 'sender', data: {test: 1}}, {test: 1}],
+            expect: [{from: 'sender', data: {test: 1}}, {data: {test: 2}}],
             scripts: [
                 {
                     name: 'receiver',

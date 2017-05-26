@@ -39,25 +39,25 @@ Receiver pm2 script
 ```js
 const pm2Bridge = require('pm2-bridge');
 
-pm2Bridge.onMessage(function(data) {
+pm2Bridge.onMessage((data, context) => {
     // Do something with the data
     // ...
 
     console.log(data.from); // logs sender's pm2 name
     console.log(data.data.message); // ping
-    // Reply when your done
-    this.reply({message: 'pong'});
+    // Reply using the provided context
+    context.reply({message: 'pong'});
 });
 ```
 
 ## Options
-`pm2Bridge.onMessage(function cb(data) {console.log(data);})`:
+`pm2Bridge.onMessage(function cb(data, context) {console.log(data);})`:
 
 - `data`:
     - `from`: the name of the pm2 process that sent the message
     - `data`: the data that the sender sent along
-
-The `cb` callback is bound to a `reply` method that can be called to return the data to the sender
+- `context` :
+    - `reply(data)`: You can call this function with your answer data
 
 `pm2Bridge.send(message).then(response => {console.log(response}`:
 - `message`:
@@ -66,6 +66,6 @@ The `cb` callback is bound to a `reply` method that can be called to return the 
     - `timeout`: response timeout in ms. If after that the receiver has not responded `send` will be rejected
 `pm2Bridge.send` returns a promise that resolves with the receiver's response.
 `pm2Bridge.send` returns a promise that rejects when one of the following happens:
-- `pm2Bridge.send` where given invalid arguments
+- `pm2Bridge.send` was given invalid arguments
 - No receiver with the specified pm2 name could be found
-- Timeout exceeded
+- Timeout exceeded. There are 2 possible reasons for this error. (1) The pm2-bridge manager is not launched so it could not handle the message. (2) The receiver received the message but did not reply to it.

@@ -2,7 +2,7 @@
   "name": "pm2-bridge",
   "version": "1.0.0",
   "description": "Interprocess communication with pm2",
-  "main": "src/index.js",
+  "main": "src",
   "scripts": {
     "delete": "pm2 delete ./start.json",
     "eslint": "eslint src bin",
@@ -24,5 +24,13 @@
     "mocha": "^3.4.2",
     "pm2": "^2.4.6",
     "should": "^11.2.1"
+  },
+  "apps" : [{
+    "script"             : "src/manager.js",
+    "merge_logs"         : true,
+    "max_memory_restart" : "200M"
+  }],
+  "dependencies": {
+    "pmx": "^1.2.0"
   }
 }

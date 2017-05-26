@@ -8,7 +8,7 @@ const defaultOptions = {
     timeout: 2000
 };
 
-function getThisCb(packet) {
+function getContext(packet) {
     return {
         reply: function (data) {
             var toReply = {
@@ -31,11 +31,13 @@ process.on('message', function (packet) {
         } else if (packet.data.data.error) { // user error
             pending.reject(new Error(packet.data.data.error));
         } else { // success
-            pending.resolve(packet.data.data);
+            pending.resolve({
+                data: packet.data.data
+            });
         }
     } else {
         for (let i = 0; i < callbacks.length; i++) {
-            callbacks[i].call(getThisCb(packet), packet.data);
+            callbacks[i].call(null, packet.data, getContext(packet));
         }
     }
 });

@@ -19,20 +19,23 @@ pm2.connect(function () {
     pm2.launchBus(function (err, bus) {
         bus.on('pm2-bridge', function (packet) {
 
-            var data = packet.data;
+            const data = packet.data;
 
             if (from[data.messageId]) {
+                // This message is a pm2-bridge reply since the messageId exists
                 data.to = from[data.messageId];
                 delete from[data.messageId];
             } else if (data.to) {
+                // This message is a pm2-bridge message
                 from[data.messageId] = packet.process.name;
             } else {
+                // Do nothing, this message is not destined for pm2-bridge
                 return;
             }
 
-            var to = data.to;
-            var receivers = processList.filter(p => to === p.name);
-            var prom = Promise.resolve();
+            const to = data.to;
+            const receivers = processList.filter(p => to === p.name);
+            let prom = Promise.resolve();
             if (receivers.length !== to.length) {
                 prom = prom.then(updateProcessList);
             }

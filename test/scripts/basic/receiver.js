@@ -2,14 +2,10 @@
 
 const pm2Bridge = require('../../..');
 
-pm2Bridge.onMessage(function () {
+pm2Bridge.onMessage((data, context) => {
     process.send({
         type: 'pm2-bridge:test',
         data: 'success: receiver received'
     });
-    this.reply({});
+    context.reply(0);
 });
-
-setTimeout(function () {
-
-}, 5000);

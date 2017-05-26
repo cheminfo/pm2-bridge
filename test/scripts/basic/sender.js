@@ -15,8 +15,3 @@ pm2Bridge.send({
         data: `error: ${err.message}`
     });
 });
-
-
-setTimeout(function () {
-
-}, 5000);
