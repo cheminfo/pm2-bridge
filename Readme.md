@@ -71,3 +71,6 @@ pm2 logs
 - `pm2Bridge.send` was given invalid arguments
 - No receiver with the specified pm2 name could be found
 - Timeout exceeded. There are 2 possible reasons for this error. (1) The pm2-bridge manager is not launched so it could not handle the message. (2) The receiver received the message but did not reply to it.
+
+# LICENSE
+MIT
