@@ -22,7 +22,6 @@
     "eslint-config-cheminfo": "^1.8.0",
     "eslint-plugin-no-only-tests": "^1.1.0",
     "mocha": "^3.4.2",
-    "pm2": "^2.4.6",
     "should": "^11.2.1"
   },
   "apps" : [{
@@ -31,6 +30,7 @@
     "max_memory_restart" : "200M"
   }],
   "dependencies": {
+    "pm2": "^2.4.6",
     "pmx": "^1.2.0"
   }
 }
