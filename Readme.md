@@ -9,14 +9,6 @@ npm i -g pm2
 pm2 install pm2-bridge 
 ```
 
-### Install the pm2-bridge module
-```bash
-# Install the module
-pm2 install pm2-bridge
-# check that the module was installed
-pm2 status
-```
-
 ### Install pm2-bridge client
 ```bash
 npm install pm2-bridge
@@ -69,13 +61,13 @@ pm2 logs
 - `context` :
     - `reply(data)`: You can call this function with your answer data
 
-`pm2Bridge.send(message).then(response => {console.log(response}`:
+`pm2Bridge.send(message).then(response => {})`:
 - `message`:
     - `data`: the content of the message to be passed
     - `to`: the pm2 name of the process to which the message is destined to
-    - `timeout`: response timeout in ms. If after that the receiver has not responded `send` will be rejected
-`pm2Bridge.send` returns a promise that resolves with the receiver's response.
-`pm2Bridge.send` returns a promise that rejects when one of the following happens:
+    - `timeout` (optional): response timeout in ms, defaults to 2 seconds. 
+
+`pm2Bridge.send` returns a promise fulfills with the response message, and  rejects when one of the following happens:
 - `pm2Bridge.send` was given invalid arguments
 - No receiver with the specified pm2 name could be found
 - Timeout exceeded. There are 2 possible reasons for this error. (1) The pm2-bridge manager is not launched so it could not handle the message. (2) The receiver received the message but did not reply to it.
