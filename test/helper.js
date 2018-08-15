@@ -81,6 +81,7 @@ module.exports = {
     }
 
     function close(err) {
+      messages = [];
       return pm2DeleteAll({
         ignoreError: true
       }).then(
