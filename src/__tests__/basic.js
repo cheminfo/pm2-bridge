@@ -1,6 +1,6 @@
 'use strict';
 
-const helper = require('../helper');
+const helper = require('../../test/helper');
 
 afterAll(() => helper.disconnect());
 

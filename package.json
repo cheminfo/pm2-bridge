@@ -8,27 +8,21 @@
     "eslint": "eslint src bin",
     "eslint-fix": "eslint src bin --fix",
     "start": "pm2 startOrRestart ./start.json || echo 'please install pm2: npm i -g pm2'",
-    "test": "npm run start && jest --runInBand --verbose",
+    "test": "npm run start && jest --runInBand --verbose && npm run eslint",
     "travis-test": "npm run test; es=$?; pm2 kill; exit $es"
   },
   "keywords": [
     "pm2",
     "process"
   ],
-  "jest": {
-    "testMatch": [
-      "**/test/tests/**/*.js"
-    ]
-  },
   "author": "Daniel Kostro <kostro.d@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "eslint-config-cheminfo": "^1.8.0",
-    "eslint-plugin-no-only-tests": "^1.1.0",
-    "jest": "^23.5.0",
-    "mocha": "^3.4.2",
-    "should": "^11.2.1"
+    "eslint": "^5.3.0",
+    "eslint-config-cheminfo": "^1.18.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.21.0",
+    "jest": "^23.5.0"
   },
   "apps": [
     {
@@ -39,6 +33,6 @@
   ],
   "dependencies": {
     "pm2": "^3.0.3",
-    "pmx": "^1.2.0"
+    "pmx": "^1.6.7"
   }
 }
