@@ -24,13 +24,15 @@
     "mocha": "^3.4.2",
     "should": "^11.2.1"
   },
-  "apps" : [{
-    "script"             : "src/manager.js",
-    "merge_logs"         : true,
-    "max_memory_restart" : "200M"
-  }],
+  "apps": [
+    {
+      "script": "src/manager.js",
+      "merge_logs": true,
+      "max_memory_restart": "200M"
+    }
+  ],
   "dependencies": {
-    "pm2": "^2.4.6",
+    "pm2": "^3.0.3",
     "pmx": "^1.2.0"
   }
 }
